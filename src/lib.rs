@@ -36,10 +36,9 @@ pub fn encode(input: &[u8]) -> String {
 
             if bytes.len() >= i {
                 output.push(char(buf));
+            } else {
+                output.push('=');
             }
-        }
-        while output.len() % 4 != 0 {
-            output.push('=');
         }
     }
 

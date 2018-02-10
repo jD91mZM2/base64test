@@ -1,8 +1,8 @@
 fn char(i: u8) -> char {
     match i {
-        00...25 => ('A' as u8 + i) as char,
-        26...51 => ('a' as u8 + (i-26)) as char,
-        52...61 => ('0' as u8 + (i-52)) as char,
+        00...25 => (b'A' + i) as char,
+        26...51 => (b'a' + (i-26)) as char,
+        52...61 => (b'0' + (i-52)) as char,
         62 => '+',
         63 => '/',
         _  => panic!("Out of base64 bounds")
@@ -11,9 +11,9 @@ fn char(i: u8) -> char {
 fn num(c: u8) -> u8 {
     match c as char {
         '=' => 0, // because adding 0 and not doing anything is the same thing
-        'A'...'Z' => (c - 'A' as u8),
-        'a'...'z' => (c - 'a' as u8 + 26),
-        '0'...'9' => (c - '0' as u8 + 52),
+        'A'...'Z' => (c - b'A'),
+        'a'...'z' => (c - b'a' + 26),
+        '0'...'9' => (c - b'0' + 52),
         '+' => 62,
         '/' => 63,
         _ => panic!("Not a base64 character")
@@ -55,13 +55,13 @@ pub fn decode(input: &str) -> Vec<u8> {
         buf += (num(chars[2]) as u32) << 6*1;
         buf +=  num(chars[3]) as u32;
 
-        if chars[1] != '=' as u8 {
+        if chars[1] != b'=' {
             output.push(((buf >> 8*2) & 0xFF) as u8);
         }
-        if chars[2] != '=' as u8 {
+        if chars[2] != b'=' {
             output.push(((buf >> 8*1) & 0xFF) as u8);
         }
-        if chars[3] != '=' as u8 {
+        if chars[3] != b'=' {
             output.push((buf & 0xFF) as u8);
         }
     }
